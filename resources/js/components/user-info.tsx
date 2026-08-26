@@ -7,11 +7,16 @@ export function UserInfo({
     showEmail = false,
     team = null,
 }: {
-    user: User;
+    user: User | null;
     showEmail?: boolean;
     team?: Team | null;
 }) {
     const getInitials = useInitials();
+
+    if (!user) {
+        return null;
+    }
+
     const showAvatar = Boolean(user.avatar && user.avatar !== '');
 
     return (
@@ -20,17 +25,23 @@ export function UserInfo({
                 {showAvatar ? (
                     <AvatarImage src={user.avatar} alt={user.name} />
                 ) : null}
+
                 <AvatarFallback className="rounded-lg text-black dark:text-white">
                     {getInitials(user.name)}
                 </AvatarFallback>
             </Avatar>
+
             <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.name}</span>
+                <span className="truncate font-medium">
+                    {user.name}
+                </span>
+
                 {team ? (
                     <span className="truncate text-xs text-muted-foreground">
                         {team.name}
                     </span>
                 ) : null}
+
                 {!team && showEmail ? (
                     <span className="truncate text-xs text-muted-foreground">
                         {user.email}
